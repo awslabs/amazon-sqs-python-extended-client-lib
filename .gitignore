@@ -1,0 +1,4 @@
+.idea
+src/sqs_extended_client/__pycache__/
+test/__pycache__/
+*.DS_Store
