@@ -1,6 +1,6 @@
 # Amazon SQS Extended Client Library for Python
 
-### Implements the functionality of [amazon-sqs-java-extended-client-lib](https://github.com/awslabs/amazon-sqs-java-extended-client-lib) in Python
+### Implements the functionality of [amazon-sqs-java-extended-client-lib](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-s3-messages.html) in Python
 
 The Amazon SQS Extended Client allows clients to manage Amazon SQS message payloads that exceed the 256 KB message size limit, up to a size of 2 GB. In the event of publishing such large messages, the client accomplishes this feat by storing the actual payload in a S3 bucket and by storing the reference of the stored object in the SQS queue. Similarly, the extended-client is also used for retrieving and dereferencing these references of message objects stored in S3. Thus, the library is used for the following purposes:
 
@@ -66,7 +66,7 @@ sqs_extended_client.s3_client.create_bucket(Bucket=sqs_extended_client.large_pay
 ### Enabling support for payloads > 256 KB
 
 ```
-# Developing a large message which crosses the current limit
+# Sending a large message
 
 large_message = small_message * 300000 # Shall cross the limit of 256 KB
 
@@ -101,7 +101,15 @@ delete_message_response = sqs_extended_client.delete_message(
 assert delete_message_response['ResponseMetadata']['HTTPStatusCode'] == 200
 ```
 
-## Disabling 
+```
+# Deleting the queue
+
+delete_queue_response = sqs_extended_client.delete_queue(
+    QueueUrl=queue_url
+)
+
+assert delete_queue_response['ResponseMetadata']['HTTPStatusCode'] == 200
+```
 
 ## Security
 
