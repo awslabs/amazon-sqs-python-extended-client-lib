@@ -1,0 +1,84 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  AWS_REGION: us-east-1
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+      - name: Install Poetry
+        run: |
+          pip install poetry
+          poetry --version
+      - name: Check if there is a parent commit
+        id: check-parent-commit
+        run: |
+          echo "sha=$(git rev-parse --verify --quiet HEAD^)" >> $GITHUB_OUTPUT
+      - name: Detect and tag new version
+        id: check-version
+        if: steps.check-parent-commit.outputs.sha
+        uses: salsify/action-detect-and-tag-new-version@v2
+        with:
+          version-command: |
+            bash -o pipefail -c "poetry version | awk '{ print \$2 }'"
+      - name: Bump version for developmental release
+        if: "! steps.check-version.outputs.tag"
+        run: |
+          poetry version patch &&
+          version=$(poetry version | awk '{ print $2 }') &&
+          poetry version $version.dev.$(date +%s)
+      - name: Build package
+        run: |
+          poetry build
+      - name: Install package
+        run: |
+          poetry install
+      - name: Run pytest
+        run: |
+          poetry run pytest --cov=sqs_extended_client test --cov-report term-missing
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.OIDC_ROLE_NAME }}
+          role-session-name: publishrolesession
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Retrieve TEST PYPI TOKEN from secretsmanager
+        id: get-test-pypi-token
+        if: "! steps.check-version.outputs.tag"
+        run: |
+          echo "token=$(aws secretsmanager get-secret-value --secret-id ${{ vars.TEST_PYPI_TOKEN_NAME }} | jq -r '.SecretString')" >> $GITHUB_OUTPUT
+      - name: Retrieve PYPI TOKEN from secretsmanager
+        id: get-pypi-token
+        if: steps.check-version.outputs.tag
+        run: |
+          echo "token=$(aws secretsmanager get-secret-value --secret-id ${{ vars.PYPI_TOKEN_NAME }} | jq -r '.SecretString')" >> $GITHUB_OUTPUT
+      - name: Publish package on TestPyPI
+        if: "! steps.check-version.outputs.tag"
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ steps.get-test-pypi-token.outputs.token }}
+          repository_url: https://test.pypi.org/legacy/
+      - name: Publish package on PyPI
+        if: steps.check-version.outputs.tag
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ steps.get-pypi-token.outputs.token }}
