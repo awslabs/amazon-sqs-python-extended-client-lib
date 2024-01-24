@@ -59,6 +59,9 @@ jobs:
           role-to-assume: ${{ vars.OIDC_ROLE_NAME }}
           role-session-name: publishrolesession
           aws-region: ${{ env.AWS_REGION }}
+      - name: Run Integration Tests
+        run: |
+          poetry run pytest test_integ
       - name: Retrieve TEST PYPI TOKEN from secretsmanager
         id: get-test-pypi-token
         if: "! steps.check-version.outputs.tag"

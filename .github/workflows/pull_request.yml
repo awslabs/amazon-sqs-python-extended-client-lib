@@ -5,9 +5,6 @@ on:
     branches:
       - main
 
-env:
-  AWS_REGION: us-east-1
-
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -36,12 +33,3 @@ jobs:
       - name: Run pytest
         run: |
           poetry run pytest --cov=sqs_extended_client test --cov-report term-missing
-      - name: configure aws credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ vars.OIDC_ROLE_NAME }}
-          role-session-name: publishrolesession
-          aws-region: ${{ env.AWS_REGION }}
-      - name: Run Integration Tests
-        run: |
-          poetry run pytest test_integ
