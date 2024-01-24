@@ -64,11 +64,6 @@ jobs:
         if: "! steps.check-version.outputs.tag"
         run: |
           echo "token=$(aws secretsmanager get-secret-value --secret-id ${{ vars.TEST_PYPI_TOKEN_NAME }} | jq -r '.SecretString')" >> $GITHUB_OUTPUT
-      - name: Retrieve PYPI TOKEN from secretsmanager
-        id: get-pypi-token
-        if: steps.check-version.outputs.tag
-        run: |
-          echo "token=$(aws secretsmanager get-secret-value --secret-id ${{ vars.PYPI_TOKEN_NAME }} | jq -r '.SecretString')" >> $GITHUB_OUTPUT
       - name: Publish package on TestPyPI
         if: "! steps.check-version.outputs.tag"
         uses: pypa/gh-action-pypi-publish@release/v1
@@ -76,9 +71,3 @@ jobs:
           user: __token__
           password: ${{ steps.get-test-pypi-token.outputs.token }}
           repository_url: https://test.pypi.org/legacy/
-      - name: Publish package on PyPI
-        if: steps.check-version.outputs.tag
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          user: __token__
-          password: ${{ steps.get-pypi-token.outputs.token }}
