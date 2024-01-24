@@ -536,7 +536,7 @@ def _purge_queue_decorator(func):
         required_params = ['QueueUrl']
         sqs_client.validate_required_parameters(required_params, ExceptionMessages.INVALID_ARGUMENTS_FOR_PURGE_QUEUE, **kwargs)
 
-        logger.warn("Calling purgeQueue deletes SQS messages without deleting their payload from S3.")
+        logger.warning("Calling purgeQueue deletes SQS messages without deleting their payload from S3.")
 
         response = func(*args, **kwargs)
         return response

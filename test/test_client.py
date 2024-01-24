@@ -581,7 +581,7 @@ class TestSQSExtendedClient(unittest.TestCase):
 
         # Asserting that the message payload has been modified
         expected_message_body = _message_body_builder(self.sqs_extended_client.use_legacy_attribute, self.s3_key, TestSQSExtendedClient.bucket_name)
-        assert(_compare_json_objects(message_body, expected_message_body), True)
+        assert _compare_json_objects(message_body, expected_message_body), True
 
     
     def test_store_in_s3_large_payload(self):
@@ -597,7 +597,7 @@ class TestSQSExtendedClient(unittest.TestCase):
 
         # Asserting that the message payload has been modified
         expected_message_body = _message_body_builder(self.sqs_extended_client.use_legacy_attribute, self.s3_key, TestSQSExtendedClient.bucket_name)
-        assert(_compare_json_objects(message_body, expected_message_body), True)
+        assert _compare_json_objects(message_body, expected_message_body), True
     
     def test_send_message_with_invalid_arguments(self):
         with pytest.raises(SQSExtendedClientException) as error:
