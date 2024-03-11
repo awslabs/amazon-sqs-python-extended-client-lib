@@ -42,7 +42,7 @@ Ensure that the package has been imported in the file you want to run your code 
 
 ### Setting up the prerequisites for sending message payloads > 256 KB
 
-```
+```python
 import boto3
 import sqs_extended_client
 
@@ -65,7 +65,7 @@ sqs_extended_client.s3_client.create_bucket(Bucket=sqs_extended_client.large_pay
 
 ### Enabling support for payloads > 256 KB
 
-```
+```python
 # Sending a large message
 
 large_message = small_message * 300000 # Shall cross the limit of 256 KB
@@ -77,7 +77,7 @@ send_message_response = sqs_extended_client.send_message(
 assert send_message_response['ResponseMetadata']['HTTPStatusCode'] == 200
 ```
 
-```
+```python
 # Receiving the large message
 
 receive_message_response = sqs_extended_client.receive_message(
@@ -88,7 +88,7 @@ assert receive_message_response['Messages'][0]['Body'] == large_message
 receipt_handle = receive_message_response['Messages'][0]['ReceiptHandle']
 ```
 
-```
+```python
 # Deleting the large message
 
 # Set to True for deleting the payload from S3
@@ -101,7 +101,7 @@ delete_message_response = sqs_extended_client.delete_message(
 assert delete_message_response['ResponseMetadata']['HTTPStatusCode'] == 200
 ```
 
-```
+```python
 # Deleting the queue
 
 delete_queue_response = sqs_extended_client.delete_queue(
