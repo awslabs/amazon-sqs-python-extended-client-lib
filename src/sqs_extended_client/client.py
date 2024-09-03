@@ -653,7 +653,7 @@ class SQSExtendedClientSession(boto3.session.Session):
         class_attributes["get_from_receipt_handle_by_marker"] = _get_from_receipt_handle_by_marker
 
         # Adding the S3 client to the object
-        class_attributes["s3_client"] = boto3.client("s3")
+        class_attributes["s3_client"] = super().client("s3")
 
         # overwriting the send_message function
         class_attributes["send_message"] = _send_message_decorator(class_attributes["send_message"])
