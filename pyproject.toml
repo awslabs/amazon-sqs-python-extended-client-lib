@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "amazon-sqs-extended-client"
-version = "1.0.0"
+version = "1.0.1"
 description = "Python version of AWS SQS extended client"
 authors = ["Amazon Web Service - SQS"]
 license = "Apache-2.0"
