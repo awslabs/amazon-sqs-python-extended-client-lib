@@ -83,7 +83,14 @@ def _validate_required_parameters(self, required_params: list, error_message: st
         
     return
 
+def _get_bytes_size_in_bytes(self, b: bytes) -> int:
+    """
+    Responsible for calculating the size of a byte collection in bytes
 
+    :b: The byte collection whose size is to be determined.
+
+    """
+    return len(b)
 
 def _get_string_size_in_bytes(self, s: str) -> int:
     """
@@ -156,7 +163,7 @@ def _get_message_attributes_size(self, message_attributes: dict) -> int:
         
         binarytype_value = value.get("BinaryValue", 0)
         if binarytype_value:
-            total_message_attributes_size += self.get_string_size_in_bytes(binarytype_value)
+            total_message_attributes_size += self.get_bytes_size_in_bytes(binarytype_value)
         
     return total_message_attributes_size
 
@@ -636,6 +643,7 @@ class SQSExtendedClientSession(boto3.session.Session):
             _delete_delete_payload_from_s3
         )
 
+        class_attributes["get_bytes_size_in_bytes"] = _get_bytes_size_in_bytes
         class_attributes["get_string_size_in_bytes"] = _get_string_size_in_bytes
         class_attributes["get_reserved_attribute_name_if_present"] = _get_reserved_attribute_name_if_present
         class_attributes["get_s3_key"] = _get_s3_key
