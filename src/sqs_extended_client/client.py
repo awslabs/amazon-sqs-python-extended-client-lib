@@ -317,7 +317,7 @@ def _get_original_receipt_handle(self, modified_receipt_handle: str) -> str:
     when the message was stored in S3.
 
     """
-    return modified_receipt_handle.split('-')[-1]
+    return modified_receipt_handle.split(S3_KEY_MARKER)[-1]
 
 
 def _retrieve_message_from_s3(self, message_body: str) -> str:
