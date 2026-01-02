@@ -23,7 +23,7 @@ The SQS Extended Client makes use of several additional message attributes which
 1. ```MESSAGE_POINTER_CLASS```: The value held by this global variable, or by ```LEGACY_MESSAGE_POINTER_CLASS```, is critical to the functioning of the client as it holds the class name of the pointer that stored the original payload in a S3 bucket.
 2. ```MAX_ALLOWED_ATTRIBUTES```: The value held by this global variable denotes the constraint of having a maximum of 10 message attributes for each large message payload.
 3. ```S3_KEY_ATTRIBUTE_NAME```: The value held by this global variable denotes the S3 Key, if present, which would be used to store the large message payload.
-3. ```DEFAULT_MESSAGE_SIZE_THRESHOLD```: This states the threshold for the size of the messages in the S3 bucket and it cannot be less than 0 or more than 262144 (default value).
+3. ```DEFAULT_MESSAGE_SIZE_THRESHOLD```: This states the threshold for the size of the messages in the S3 bucket and it cannot be less than 0 or more than 1048576 (default value).
 4. ```RESERVED_ATTRIBUTE_NAME```: The value held by this global variable, or by ```LEGACY_RESERVED_ATTRIBUTE_NAME```, denotes the attribute name which will be reserved for the purpose of handling large message payloads.
 
 ## Getting Started

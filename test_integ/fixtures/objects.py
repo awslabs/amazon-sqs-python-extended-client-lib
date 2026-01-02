@@ -6,7 +6,7 @@ import copy
 
 @pytest.fixture
 def default_message_size_threshold():
-    return 262144
+    return 1048576
 
 @pytest.fixture
 def small_message_body():

@@ -17,7 +17,7 @@ MESSAGE_POINTER_CLASS = 'software.amazon.payloadoffloading.PayloadS3Pointer'
 
 S3_KEY_ATTRIBUTE_NAME = 'S3Key'
 MAX_ALLOWED_ATTRIBUTES = 10 - 1  # 10 for SQS and 1 reserved attribute
-DEFAULT_MESSAGE_SIZE_THRESHOLD = 262144
+DEFAULT_MESSAGE_SIZE_THRESHOLD = 1048576
 
 S3_BUCKET_NAME_MARKER = "-..s3BucketName..-"
 S3_KEY_MARKER = "-..s3Key..-"
