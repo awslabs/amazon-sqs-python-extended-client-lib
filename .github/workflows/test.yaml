@@ -1,9 +1,7 @@
-name: PullRequest
+name: Test
 
 on:
   pull_request:
-    branches:
-      - main
 
 jobs:
   test:
@@ -11,6 +9,9 @@ jobs:
     permissions:
       contents: write
       id-token: write
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
     steps:
       - name: Check out the repository
         uses: actions/checkout@v3
@@ -19,7 +20,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.9"
+          python-version: "3.14"
       - name: Install Poetry
         run: |
           pip install poetry
@@ -33,3 +34,4 @@ jobs:
       - name: Run pytest
         run: |
           poetry run pytest --cov=sqs_extended_client test --cov-report term-missing
+
